@@ -27,6 +27,10 @@ embed_dataroot/
 *.h5
 *.h5ad
 
+# ...except the small committed demo subset (a real HEST-1k CCRCC crop)
+!demo_data/**/*.h5
+!demo_data/**/*.h5ad
+
 # Logs & scheduler
 *.log
 slurm-*.out

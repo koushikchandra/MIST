@@ -55,7 +55,28 @@ training.
 
 ---
 
-## 3. Training
+## 3. Quick start — demo dataset
+
+A tiny **real** dataset ships in `demo_data/` (a spatial crop of two HEST-1k CCRCC slides,
+400 spots each, UNI features, 50-gene panel) so you can verify the pipeline end-to-end in
+seconds — no downloads, CPU is fine:
+
+```bash
+python train_hest.py \
+  --cohort DEMO --version V3 --feature_encoder uni_v1_official \
+  --source_dataroot demo_data/source \
+  --embed_dataroot  demo_data/embed \
+  --save_root results_demo --seed 1 --device cpu --epochs 5
+```
+
+This trains full MIST on `INT1` and tests on `INT5`, writing metrics/predictions under
+`results_demo/DEMO_V3_seed1/`. The demo is a smoke test, not a benchmark — with 400 spots
+and 5 epochs the PCC is not meaningful; use the full HEST data (below) for real numbers.
+`demo_data/make_demo_data.py` documents exactly how the subset was built.
+
+---
+
+## 4. Training
 
 ### Intra-cohort (`train_hest.py`)
 Train and test within one cohort, over its k-fold splits.
@@ -96,7 +117,7 @@ averaged over seeds 1, 2, 3.
 
 ---
 
-## 4. Ablations
+## 5. Ablations
 
 `mist_context.py` exposes the full **L/G/S factorial** and the neighborhood control,
 driven by `--config` in the context trainers (`train_context.py`,
@@ -130,7 +151,7 @@ Equivalently, `train_hest.py --components <LGS>` runs the same factorial intra-c
 
 ---
 
-## 5. Outputs
+## 6. Outputs
 
 Each run writes, under `<save_root>/<TAG>/`:
 
@@ -141,7 +162,7 @@ Each run writes, under `<save_root>/<TAG>/`:
 
 ---
 
-## 6. Files
+## 7. Files
 
 | File | Role |
 |------|------|
@@ -158,6 +179,6 @@ Each run writes, under `<save_root>/<TAG>/`:
 
 ---
 
-## 7. Citation
+## 8. Citation
 
 If you use this code, please cite the accompanying paper (see the submission).

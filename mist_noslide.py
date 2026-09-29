@@ -12,7 +12,7 @@ from mist import knn_graph, RBF, LocalKNNAttention, GlobalAttention, mist_loss
 
 
 class NoSlideMISTBlock(nn.Module):
-    """MorphoBlock with the slide-level (AttentionPool -> slide_proj) stream removed."""
+    """MISTBlock with the slide-level (AttentionPool -> slide_proj) stream removed."""
     def __init__(self, dim, n_heads, num_rbf, dropout, attn_dropout,
                  use_distance_bias=True, uniform_local=False):
         super().__init__()

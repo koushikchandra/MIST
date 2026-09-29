@@ -1,4 +1,4 @@
-"""LoGST (V3): Local-Global Spatial Transformer for gene expression prediction.
+"""MIST (V3): Local-Global Spatial Transformer for gene expression prediction.
 
 Input:  feats [N, feat_dim]  — frozen patch embeddings (e.g. UNI, CONCH, UNI+CONCH concat)
         coords [N, 2]        — pixel-space (x, y) spot coordinates
@@ -12,7 +12,7 @@ spacing before the RBF. Raw HEST pixel coordinates give neighbour distances ~1e3
 which saturate exp(-gamma*d^2) to 0 for all gammas in [1e-3, 1e1] -> the distance
 bias becomes a no-op (equivalent to binary adjacency). Normalisation restores it.
 
-Architecture (one MorphoBlock repeated n_layers times):
+Architecture (one MISTBlock repeated n_layers times):
   1. LocalKNNAttention  — distance-biased attention over k spatial neighbours
   2. GlobalAttention    — full self-attention over all N spots
   3. AttentionPool      — learned scalar scoring → slide summary token → added to global stream
@@ -119,7 +119,7 @@ class AttentionPool(nn.Module):
 # Transformer block (V3: local + global + slide token, no conditioning)
 # ---------------------------------------------------------------------------
 
-class MorphoBlock(nn.Module):
+class MISTBlock(nn.Module):
     def __init__(self, dim: int, n_heads: int, num_rbf: int,
                  dropout: float, attn_dropout: float, use_distance_bias: bool = True,
                  uniform_local: bool = False):
@@ -154,7 +154,7 @@ class MorphoBlock(nn.Module):
 # ---------------------------------------------------------------------------
 
 class MIST(nn.Module):
-    """LoGST V3: coordinate-invariant local-global spatial transformer."""
+    """MIST V3: coordinate-invariant local-global spatial transformer."""
     def __init__(
         self,
         feat_dim: int = 1024,
@@ -177,7 +177,7 @@ class MIST(nn.Module):
         self.in_proj = nn.Linear(feat_dim, dim)
         self.rbf = RBF(num_rbf)
         self.blocks = nn.ModuleList([
-            MorphoBlock(dim, n_heads, num_rbf, dropout, attn_dropout, use_distance_bias, uniform_local)
+            MISTBlock(dim, n_heads, num_rbf, dropout, attn_dropout, use_distance_bias, uniform_local)
             for _ in range(n_layers)
         ])
         self.head = nn.Sequential(nn.LayerNorm(dim), nn.Linear(dim, n_genes))
