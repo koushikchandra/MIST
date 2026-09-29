@@ -176,6 +176,7 @@ Each run writes, under `<save_root>/<TAG>/`:
 | `data.py` | feature/expression/split loading |
 | `stflow_utils.py` | vendored HDF5 / AnnData IO helpers (self-contained) |
 | `evaluation.py` | metrics, prediction saving, train/val split |
+| `baselines/` | the four feature-matched baselines (ST-Net, Hist2ST, BLEEP, STEM); see `baselines/README.md` |
 
 ---
 
